@@ -82,6 +82,11 @@ module.exports = async ({github, context, core}, formulae_detect, dependent_test
     const test_bot_formulae_args = ["--only-formulae", "--junit", "--only-json-tab", "--skip-dependents"]
     const test_bot_dependents_args = ["--only-formulae-dependents", "--junit"]
 
+    if (process.env.RUNNER_DEBUG) {
+      test_bot_formulae_args.push('--verbose')
+      test_bot_dependents_args.push('--verbose')
+    }
+
     if (label_names.includes(`CI-test-bot-no-concurrent-downloads`)) {
       console.log(`CI-test-bot-no-concurrent-downloads label found. Running with HOMEBREW_DOWNLOAD_CONCURRENCY=1`)
       core.setOutput('download-concurrency', '1')
