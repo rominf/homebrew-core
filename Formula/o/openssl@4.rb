@@ -44,6 +44,12 @@ class OpensslAT4 < Formula
     end
   end
 
+  # Backport commits to avoid test intermittent failures
+  patch do
+    url "https://github.com/openssl/openssl/commit/d9f73e36c5fe720b3367e0fc6501683a3f91193a.patch?full_index=1"
+    sha256 "3508588c5e03ba6d3898512f0e8e3aa1f177e243c026884d6c31020359cae59e"
+  end
+
   def install
     if OS.linux?
       ENV.prepend_create_path "PERL5LIB", buildpath/"lib/perl5"
@@ -79,7 +85,7 @@ class OpensslAT4 < Formula
     end
 
     pkgetc.mkpath
-    system "perl", "./Configure", *(configure_args + arch_args)
+    system "perl", "./Configure", *configure_args, *arch_args
     system "make"
     system "make", "install", "MANDIR=#{man}", "MANSUFFIX=ssl"
     system "make", "HARNESS_JOBS=#{ENV.make_jobs}", "test"
@@ -88,9 +94,11 @@ class OpensslAT4 < Formula
     touch %w[certs private].map { |subdir| pkgetc/subdir/".keepme" }
   end
 
-  def post_install
-    rm(pkgetc/"cert.pem") if (pkgetc/"cert.pem").exist?
-    pkgetc.install_symlink Formula["ca-certificates"].pkgetc/"cert.pem"
+  post_install_steps do
+    ln_sf "cert.pem", "cert.pem",
+          source_formula: "ca-certificates",
+          source_base:    :formula_pkgetc,
+          target_base:    :pkgetc
   end
 
   def caveats
