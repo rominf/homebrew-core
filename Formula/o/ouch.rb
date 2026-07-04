@@ -1,8 +1,8 @@
 class Ouch < Formula
   desc "Painless compression and decompression for your terminal"
   homepage "https://github.com/ouch-org/ouch"
-  url "https://github.com/ouch-org/ouch/archive/refs/tags/0.8.0.tar.gz"
-  sha256 "72ed23c0b2aa51b1b33d3251ddae14cf2bb07a24035d1593c06fc97070e4edf0"
+  url "https://github.com/ouch-org/ouch/archive/refs/tags/0.8.1.tar.gz"
+  sha256 "920f73d4b162bd1814b67c57906b7322345f198d763f28d04722a406f8352246"
   license "MIT"
   head "https://github.com/ouch-org/ouch.git", branch: "main"
 
